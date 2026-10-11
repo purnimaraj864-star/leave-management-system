@@ -5,9 +5,18 @@ import StatusBadge from '../components/StatusBadge';
 
 function AdminDashboard() {
     const [leaves, setLeaves] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
+
+    const searchedLeaves = leaves.filter((leave) => {
+        const query = searchQuery.toLowerCase().trim();
+        if (!query) return true;
+        const name = leave.employee?.name?.toLowerCase() || '';
+        const email = leave.employee?.email?.toLowerCase() || '';
+        return name.includes(query) || email.includes(query);
+    });
 
     const fetchAllLeaves = async () => {
         try {
@@ -72,6 +81,41 @@ function AdminDashboard() {
                     <h1 style={styles.title}>Admin Dashboard 🛡️</h1>
                     <p style={styles.subtitle}>Review and manage leave applications from all employees</p>
                 </div>
+                <div style={{ position: 'relative', minWidth: '300px' }}>
+                    <input
+                        type="text"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        placeholder="🔍 Search employee by name or email..."
+                        style={{
+                            width: '100%',
+                            padding: '10px 14px',
+                            border: '1px solid #d1d5db',
+                            borderRadius: '8px',
+                            fontSize: '14px',
+                            backgroundColor: '#ffffff'
+                        }}
+                    />
+                    {searchQuery && (
+                        <button
+                            type="button"
+                            onClick={() => setSearchQuery('')}
+                            style={{
+                                position: 'absolute',
+                                right: '10px',
+                                top: '50%',
+                                transform: 'translateY(-50%)',
+                                background: 'transparent',
+                                border: 'none',
+                                color: '#9ca3af',
+                                cursor: 'pointer',
+                                fontSize: '16px'
+                            }}
+                        >
+                            ✕
+                        </button>
+                    )}
+                </div>
             </div>
 
             {error && <div style={styles.errorAlert}>{error}</div>}
@@ -100,7 +144,7 @@ function AdminDashboard() {
                             </tr>
                         </thead>
                         <tbody>
-                            {leaves.map((leave) => (
+                            {searchedLeaves.map((leave) => (
                                 <tr key={leave._id} style={styles.tr}>
                                     <td style={styles.td}>
                                         <div style={{ fontWeight: '600', color: '#111827' }}>
