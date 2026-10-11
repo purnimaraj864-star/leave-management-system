@@ -68,7 +68,7 @@ function UserDashboard() {
                 </div>
             ) : (
                 <div style={styles.tableCard}>
-                    <table style={styles.table}>
+                    <table style={styles.table} className="responsive-table">
                         <thead>
                             <tr style={styles.thRow}>
                                 <th style={styles.th}>Leave Type</th>
@@ -82,19 +82,12 @@ function UserDashboard() {
                         <tbody>
                             {leaves.map((leave) => (
                                 <tr key={leave._id} style={styles.tr}>
-                                    <td style={{ ...styles.td, fontWeight: '600' }}>{leave.leaveType}</td>
-                                    <td style={styles.td}>
-                                        {new Date(leave.fromDate).toLocaleDateString()}
-                                    </td>
-                                    <td style={styles.td}>
-                                        {new Date(leave.toDate).toLocaleDateString()}
-                                    </td>
-                                    <td style={{ ...styles.td, maxWidth: '250px' }}>{leave.reason}</td>
-                                    <td style={styles.td}>
-                                        <StatusBadge status={leave.status} />
-                                    </td>
-                                    <td style={styles.td}>
-                                        <div style={styles.actionGroup}>
+                                    <td data-label="Leave Type" style={{ ...styles.td, fontWeight: '600' }}>{leave.leaveType}</td>
+                                    <td data-label="From Date" style={styles.td}>{new Date(leave.fromDate).toLocaleDateString()}</td>
+                                    <td data-label="To Date" style={styles.td}>{new Date(leave.toDate).toLocaleDateString()}</td>
+                                    <td data-label="Reason" style={{ ...styles.td, maxWidth: '250px' }}>{leave.reason}</td>
+                                    <td data-label="Status" style={styles.td}><StatusBadge status={leave.status} /></td>
+                                    <td data-label="Actions" style={styles.td}><div style={styles.actionGroup}>
                                             <Link to={`/leaves/${leave._id}`} style={styles.viewLink}>
                                                 View
                                             </Link>
